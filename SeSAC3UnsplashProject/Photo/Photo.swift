@@ -7,30 +7,31 @@
 
 import Foundation
 
-struct PhotoResult: Codable {
-    let id: String?
-    let created_at: String?
+struct Photo: Codable, Hashable {
+    let total: Int
+    let total_pages: Int
+    let results: [PhotoResult]
+}
+
+struct PhotoResult: Codable, Hashable {
+    let id: String
+    let created_at: String
     let description: String?
-    let urls: PhotoURL?
-    let links: PhotoLink?
-    let user: PhotoUser?
+    let urls: PhotoURL
+    let links: PhotoLink
+    let user: PhotoUser
+    let likes: Int
 }
 
-struct Photo: Codable {
-    let total: Int?
-    let total_pages: Int?
-    let results: [PhotoResult]?
-}
-
-struct PhotoURL: Codable {
+struct PhotoURL: Codable, Hashable {
     let full: String
     let thumb: String
 }
 
-struct PhotoLink: Codable {
+struct PhotoLink: Codable, Hashable {
     let html: String
 }
 
-struct PhotoUser: Codable {
+struct PhotoUser: Codable, Hashable {
     let username: String
 }

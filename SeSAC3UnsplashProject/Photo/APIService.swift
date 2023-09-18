@@ -58,6 +58,47 @@ class APIService {
             
         }.resume()
     }
+    
+    func randomImageAPIRequest(completionHandler: @escaping (RandomPhoto?) -> Void) {
+        guard let url = URL(string: "https://api.unsplash.com/photos/random?client_id=\(unsplashAccessKey)") else { return }
+        
+        let request = URLRequest(url: url, timeoutInterval: 10)
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            DispatchQueue.main.async {
+                if let error {
+                    print(error)
+                    completionHandler(nil)
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse, (200...500).contains(response.statusCode) else {
+                    print(error)
+                    completionHandler(nil)
+                    return
+                }
+                
+                guard let data = data else {
+                    print(error)
+                    completionHandler(nil)
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(RandomPhoto.self, from: data)
+                    print(result)
+                    completionHandler(result)
+                } catch {
+                    print(error)
+                    completionHandler(nil)
+                }
+            }
+            
+        }.resume()
+        
+    }
+    
 }
 
 
